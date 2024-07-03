@@ -32,43 +32,13 @@
                 <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
             </div>
             <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="/lista" class="btn btn-info">Ver lista</a>
+            <a href="/" class="btn btn-secondary">Regresar</a>
         </form>
 
 
         <br>
-        <p class="lead">Tareas Actuales</p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Fecha Inicio</th>
-                    <th>Borrar</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:if="${tareas.isEmpty()}">
-                    <td colspan="4">
-                        <div class="alert alert-warning" role="alert">
-                            No se encontraron tareas.
-                        </div>
-                    </td>
-                </tr>
-                <tr th:each="task : ${tareas}">
-                    <td th:text="${task.id}"></td>
-                    <td th:text="${task.nombre}"></td>
-                    <td th:text="${task.descripcion}"></td>
-                    <td th:text="${task.fechaInicio}"></td>
-                    <td>
-                        <form th:action="@{/task/delete/{id}(id=${task.id})}" method="post">
-                            <input type="hidden" name="_method" value="DELETE"> <!-- Utilizar POST con método DELETE -->
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
 
 
     </div>

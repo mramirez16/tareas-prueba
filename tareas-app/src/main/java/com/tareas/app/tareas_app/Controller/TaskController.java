@@ -1,6 +1,7 @@
 package com.tareas.app.tareas_app.Controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,6 @@ public class TaskController {
     @GetMapping("/form")
     public String getForm(Model viewModel) {
         viewModel.addAttribute("task", new TareaModel());
-        addTasksToModel(viewModel);
         return "form.html";
     }
 
@@ -46,10 +46,11 @@ public class TaskController {
     @PostMapping("/task/save")
     public String save(TareaModel model, Model viewModel) {
         LocalDate fechaInicio = model.getFechaInicio();
+        System.out.println("Fecha formateada: " + fechaInicio);
         try {
             query.save(model);
             viewModel.addAttribute("mensaje", "Tarea guardada correctamente");
-            addTasksToModel(viewModel);
+
         } catch (Exception e) {
             viewModel.addAttribute("mensaje", "Error al guardar la tarea: " + e.getMessage());
         }
@@ -70,24 +71,28 @@ public class TaskController {
         try {
             query.deleteById(id);
             viewModel.addAttribute("mensaje", "Tarea eliminada correctamente");
-            addTasksToModel(viewModel);
+
         } catch (Exception e) {
             viewModel.addAttribute("mensaje",
                     "Error al eliminar la tarea con ID " + id + ": " + e.getMessage());
         }
-        return "redirect:/form";
+        return "redirect:/lista";
 
     }
 
     /**
-     * Metodo auxiliar para realizar la consulta de tareas de la BD, este metodo se
-     * hizo para reutilizar el mismo código en los metodos anteriores
-     * 
+     * Route que realiza la consulta de las tareas de la base de datos
      * @param viewModel
+     * @return
      */
-    private void addTasksToModel(Model viewModel) {
-        List<TareaModel> tasks = query.lista();
-        viewModel.addAttribute("tareas", tasks);
+    @GetMapping("/lista")
+    public String getTask(Model viewModel) {
+        List<TareaModel> tareas = query.lista();
+        if (tareas == null) {
+            tareas = new ArrayList<>();
+        }
+        viewModel.addAttribute("tareas", tareas);
+        return "lista.html";
     }
 
 }
